@@ -2,7 +2,6 @@
 name = "foundryvtt-docker-switcher"
 version = "0.0.0"
 description = "A Discord bot to easily switch felddy/foundryvtt-docker worlds"
-readme = "README.md"
 authors = [
     { name = "Angelin01", email = "angeloborsoiross@hotmail.com" }
 ]
