@@ -9,6 +9,7 @@ class Config:
 	foundry_api_url: str
 	foundry_data_path: Path
 	docker_compose_project: str
+	docker_compose_directory: Path
 	docker_service_name: str
 	env_file_path: Path
 	allowed_user_ids: list[int]
@@ -32,6 +33,7 @@ def load_config() -> Config:
 		foundry_api_url=os.getenv("FDS_FOUNDRY_API_URL", "http://localhost:30000").rstrip("/"),
 		foundry_data_path=Path(os.getenv("FDS_FOUNDRY_DATA_PATH", "./foundrydata")),
 		docker_compose_project=os.getenv("FDS_DOCKER_COMPOSE_PROJECT", "foundry"),
+		docker_compose_directory=Path(os.getenv("FDS_DOCKER_COMPOSE_DIRECTORY", ".")),
 		docker_service_name=os.getenv("FDS_DOCKER_SERVICE_NAME", "foundry"),
 		env_file_path=Path(os.getenv("FDS_ENV_FILE_PATH", "foundry.env")),
 		allowed_user_ids=_parse_int_list(os.getenv("FDS_ALLOWED_USER_IDS")),

@@ -41,18 +41,22 @@ class SwitcherBot(discord.Client):
 				return
 
 			status = await self.foundry.get_status()
-			if isinstance(status, FoundryStatusActive) and status.users > 0:
-				await interaction.response.send_message(f"Cannot switch worlds: there are {status.users} active user(s) in the current world.")
-				return
+			if isinstance(status, FoundryStatusActive):
+				if status.world == match.id:
+					await interaction.response.send_message(f"World **{match.title}** is already active.")
+					return
+				if status.users > 0:
+					await interaction.response.send_message(f"Cannot switch worlds: there are {status.users} active user(s) in the current world.")
+					return
 
 			logger.info(f"User {interaction.user} requested switch to world '{match.id}'")
 			await interaction.response.send_message(f"Switching to world **{match.title}**...")
 			await update_world_env(self.config.env_file_path, match.id)
-			await restart_service(self.config.docker_compose_project, self.config.docker_service_name)
+			await restart_service(self.config.docker_compose_project, self.config.docker_compose_directory, self.config.docker_service_name)
 
 		@switch_world.autocomplete("world")
 		async def switch_world_autocomplete(
-			interaction: discord.Interaction, current: str
+			_interaction: discord.Interaction, current: str
 		) -> list[app_commands.Choice[str]]:
 			worlds = await list_worlds(self.config.foundry_data_path)
 			return [
