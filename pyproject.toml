@@ -2,5 +2,22 @@
 name = "foundryvtt-docker-switcher"
 version = "0.0.0"
 description = "A Discord bot to easily switch felddy/foundryvtt-docker worlds"
+readme = "README.md"
+authors = [
+    { name = "Angelin01", email = "angeloborsoiross@hotmail.com" }
+]
 requires-python = ">=3.14"
-dependencies = []
+dependencies = [
+    "aiofiles>=25.1.0",
+    "discord-py>=2.6.4",
+    "httpx>=0.28.1",
+    "python-dotenv>=1.2.1",
+    "python-on-whales>=0.80.0",
+]
+
+[project.scripts]
+foundryvtt-docker-switcher = "foundryvtt_docker_switcher.__main__:run"
+
+[build-system]
+requires = ["uv_build>=0.9.28"]
+build-backend = "uv_build"
