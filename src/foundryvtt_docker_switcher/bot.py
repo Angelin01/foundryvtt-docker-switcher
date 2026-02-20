@@ -25,6 +25,14 @@ class SwitcherBot(discord.Client):
 		self.config = config
 		self.foundry = FoundryAPI(config.foundry_api_url)
 		self.tree = app_commands.CommandTree(self)
+		self._world_cache: dict[str, str] = {}
+
+	async def _get_world_title(self, world_id: str) -> str:
+		if world_id in self._world_cache:
+			return self._world_cache[world_id]
+		worlds = await list_worlds(self.config.foundry_data_path)
+		self._world_cache = {w.id: w.title for w in worlds}
+		return self._world_cache.get(world_id, world_id)
 
 	def register_commands(self):
 		@self.tree.command(name="switch-world", description="Switch the active FoundryVTT world")
@@ -79,7 +87,8 @@ class SwitcherBot(discord.Client):
 			try:
 				status = await self.foundry.get_status()
 				if isinstance(status, FoundryStatusActive):
-					activity = discord.Game(name=f"{status.world} ({status.users} online)")
+					title = await self._get_world_title(status.world)
+					activity = discord.Game(name=f"{title} ({status.users} online)")
 					presence_status = discord.Status.online
 				else:
 					activity = discord.Game(name="No active world")
