@@ -1,4 +1,4 @@
-name: Build and Push
+name: Build, Push and Release
 
 on:
   push:
@@ -10,7 +10,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build-and-push:
+  build-push-release:
     runs-on: ubuntu-slim
     permissions:
       contents: write
