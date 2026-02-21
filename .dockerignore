@@ -1,0 +1,7 @@
+.git
+.venv
+.idea
+.junie
+foundry_data
+tests
+*.md
