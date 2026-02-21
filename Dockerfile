@@ -2,13 +2,16 @@ FROM python:3.14-slim AS builder
 
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
+ENV UV_COMPILE_BYTECODE=1
+ENV UV_NO_DEV=1
+
 WORKDIR /app
 
 COPY pyproject.toml uv.lock ./
-RUN uv sync --frozen --no-dev --no-install-project
+RUN uv sync --frozen --no-install-project
 
 COPY src/ src/
-RUN uv sync --frozen --no-dev
+RUN uv sync --frozen
 
 
 FROM python:3.14-slim
@@ -22,12 +25,13 @@ RUN apt-get update \
 		> /etc/apt/sources.list.d/docker.list \
 	&& apt-get update \
 	&& apt-get install -y --no-install-recommends docker-ce-cli docker-compose-plugin \
-	&& apt-get purge -y --auto-remove ca-certificates curl gnupg \
+	&& apt-get purge -y --auto-remove curl gnupg \
 	&& rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
 COPY --from=builder /app/.venv /app/.venv
+COPY --from=builder /app/src /app/src
 
 ENV PATH="/app/.venv/bin:$PATH"
 
