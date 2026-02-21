@@ -2,6 +2,7 @@
 name = "foundryvtt-docker-switcher"
 version = "0.0.0"
 description = "A Discord bot to easily switch felddy/foundryvtt-docker worlds"
+license = "Apache-2.0"
 authors = [
     { name = "Angelin01", email = "angeloborsoiross@hotmail.com" }
 ]
